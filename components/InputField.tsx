@@ -51,11 +51,7 @@ const InputField = ({
     ? error
       ? "border-red-500"
       : isTouched && !props.value
-<<<<<<< HEAD
       ? "border-gray-300"
-=======
-      ? "border-gray-300" 
->>>>>>> 0e3da263cf6bdde1ae4a874c7c3ac30d0f1c28d2
       : isTouched && !error
       ? "border-green-500"
       : "border-gray-300"
