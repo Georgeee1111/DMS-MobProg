@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\UserController;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -20,6 +21,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/rooms/{id}', [RoomController::class, 'updateRoom']);
     Route::put('/rooms/{roomNumber}/status', [RoomController::class, 'updateRoomStatus']);
     Route::delete('/rooms/{id}', [RoomController::class, 'deleteRoom']);
-    Route::post('add-room', [RoomController::class, 'addRoom']);  
+    Route::post('add-room', [RoomController::class, 'addRoom']); 
+    
+    Route::get('/profile', [UserController::class, 'getProfile']); // Get user profile info including the profile picture URL
+    Route::post('/profile/upload', [UserController::class, 'uploadProfilePicture']); // Upload profile picture
+
     Route::post('logout', [AuthController::class, 'logout']);
 });

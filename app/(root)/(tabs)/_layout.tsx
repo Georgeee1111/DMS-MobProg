@@ -89,14 +89,14 @@ export default function Layout() {
             title: "Management",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon source={icons.profile} focused={focused} />
+              <TabIcon source={icons.bed} focused={focused} />
             ),
           }}
         />
         <Tabs.Screen
           name="notifications"
           options={{
-            title: "Rides",
+            title: "Profile",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
               <TabIcon source={icons.list} focused={focused} />
@@ -104,17 +104,17 @@ export default function Layout() {
           }}
         />
         <Tabs.Screen
-          name="services"
+          name="tenants"
           options={{
-            title: "Chat",
+            title: "Tenants",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon source={icons.chat} focused={focused} />
+              <TabIcon source={icons.tenants} focused={focused} />
             ),
           }}
         />
         <Tabs.Screen
-          name="tenants"
+          name="profile"
           options={{
             title: "Profile",
             headerShown: false,

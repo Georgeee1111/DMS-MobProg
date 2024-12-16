@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   Modal,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import InputField from "@/components/InputField";
@@ -11,40 +12,69 @@ import { icons } from "@/constants";
 import CustomButton from "@/components/CustomButton";
 import { useRouter, useSegments } from "expo-router";
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState, useEffect } from "react";
 import { Formik } from "formik";
 import { signInValidationSchema } from "../validation/validationSchema";
+import { useDispatch, useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setUser } from "../redux/userSlice";
 
 const SignIn = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const segments = useSegments() as string[];
+
+  const user = useSelector((state: any) => state.user);
+  const [userData, setUserData] = useState({
+    name: user?.name || "",
+    email: user?.email || "",
+    phone_number: user?.phone_number || "",
+  });
+
+  useEffect(() => {
+    if (user) {
+      setUserData({
+        name: user.name,
+        email: user.email,
+        phone_number: user.phone_number,
+      });
+    }
+  }, [user]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignIn = async (values: { email: string; password: string }) => {
     const { email, password } = values;
 
+    setLoading(true);
     try {
       const response = await axios.post("http://192.168.1.8:8000/api/login", {
         email,
         password,
       });
 
-      console.log("Sign In Successful:", response.data);
-
       if (response.data.token) {
         await AsyncStorage.setItem("token", response.data.token);
         console.log("Token saved:", response.data.token);
+        const { name, email: userEmail, phone_number } = response.data.user;
+
+        dispatch(
+          setUser({
+            email: userEmail,
+            name,
+            phone_number,
+          })
+        );
 
         setIsSuccess(true);
         setModalMessage("Sign in successful!");
         setIsModalVisible(true);
 
         setTimeout(() => {
-          router.replace("/(root)/(tabs)/overview");
+          router.replace("/(root)/(tabs)/profile");
         }, 1500);
       } else {
         setIsSuccess(false);
@@ -67,6 +97,8 @@ const SignIn = () => {
         setModalMessage("An unknown error occurred.");
         setIsModalVisible(true);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -124,7 +156,6 @@ const SignIn = () => {
             </Text>
           </TouchableOpacity>
         </View>
-
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={signInValidationSchema}
@@ -179,14 +210,22 @@ const SignIn = () => {
                 }
               />
 
-              <CustomButton
-                title="Sign In"
-                onPress={handleSubmit}
-                style={{
-                  backgroundColor: "rgba(0, 0, 0, 0.50)",
-                  marginTop: 16,
-                }}
-              />
+              {loading ? (
+                <ActivityIndicator
+                  size="large"
+                  color="#fff"
+                  style={{ marginTop: 16 }}
+                />
+              ) : (
+                <CustomButton
+                  title="Sign In"
+                  onPress={handleSubmit}
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.50)",
+                    marginTop: 16,
+                  }}
+                />
+              )}
 
               <TouchableOpacity onPress={handleForgetPassword} className="mt-5">
                 <Text className="text-black text-center">Forget Password?</Text>

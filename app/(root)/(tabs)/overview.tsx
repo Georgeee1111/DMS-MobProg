@@ -251,7 +251,7 @@ const RoomAnalytics = () => {
           Electricity and Water Consumption
         </Text>
         <View className="border border-gray-300 rounded-lg w-full">
-          <View className="flex-row bg-gray-200">
+          <View className="flex-row bg-[#FFDF75]">
             <Text className="flex-1 text-center font-bold border-r border-gray-300 p-3">
               Month
             </Text>
@@ -275,7 +275,10 @@ const RoomAnalytics = () => {
             { month: "November", electricity: 1650, water: 540 },
             { month: "December", electricity: 1700, water: 550 },
           ].map((item, index) => (
-            <View key={index} className="flex-row border-t border-gray-300">
+            <View
+              key={index}
+              className="flex-row border-t border-gray-300 bg-[#FFF7DD]"
+            >
               <Text className="flex-1 text-center border-r border-gray-300 p-3">
                 {item.month}
               </Text>

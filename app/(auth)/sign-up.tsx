@@ -14,8 +14,11 @@ import axios, { AxiosError } from "axios";
 import { useState, useRef } from "react";
 import { useFormik } from "formik";
 import { signUpValidationSchema } from "../validation/validationSchema";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/userSlice";
 
 const SignUp = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const segments = useSegments() as string[];
 
@@ -29,8 +32,6 @@ const SignUp = () => {
       password: "",
     },
     validationSchema: signUpValidationSchema,
-    validateOnChange: false,
-    validateOnBlur: true,
     onSubmit: async (values) => {
       setLoading(true);
       try {
@@ -39,14 +40,13 @@ const SignUp = () => {
           values
         );
         console.log("User registered successfully:", response.data);
-        router.replace("/(auth)/sign-in");
+
+        // Store user data in Redux
+        dispatch(setUser(response.data.user)); // Store user data in Redux
+
+        router.replace("/(auth)/sign-in"); // Navigate to sign-in
       } catch (error) {
-        if (error instanceof AxiosError && error.response) {
-          console.error("Registration error:", error.response.data);
-          console.error("Status code:", error.response.status);
-        } else {
-          console.error("An unknown error occurred:", error);
-        }
+        console.error("Registration error:", error);
       } finally {
         setLoading(false);
       }

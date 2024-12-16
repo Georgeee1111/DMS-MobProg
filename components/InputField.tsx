@@ -51,7 +51,7 @@ const InputField = ({
     ? error
       ? "border-red-500"
       : isTouched && !props.value
-      ? "border-gray-300" // Keep gray if focused but not typed
+      ? "border-gray-300"
       : isTouched && !error
       ? "border-green-500"
       : "border-gray-300"

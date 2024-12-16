@@ -29,6 +29,9 @@ import noResult from "@/assets/images/no-result.png";
 import welcomeImage from "@/assets/images/welcomeImage.jpg"
 import thirdSlide from "@/assets/images/third-slide.jpg"
 import plus from "@/assets/icons/plus.png"
+import bed from "@/assets/icons/bed.png"
+import tenants from "@/assets/icons/real-estate.png"
+
 
 export const images = {
   check,
@@ -65,6 +68,8 @@ export const icons = {
   target,
   to,
   plus,
+  bed,
+  tenants,
 };
 
 export const onboarding = [
